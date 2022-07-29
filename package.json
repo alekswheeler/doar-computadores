@@ -4,7 +4,7 @@
   "description": "Processo seletivo App Masters.",
   "main": "index.js",
   "scripts": {
-    "start": "ts-node-dev --ignore-watch node_modules --transpile-only ./src/server",
+    "start": "ts-node-dev --ignore-watch node_modules --respawn --transpile-only ./src/server",
     "test": "jest"
   },
   "repository": {
