@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import { Donation } from "../modules/donation/entities/Donation";
+import { AppError } from "../errors/AppError";
 
 function ensureRequiredFields (req: Request, res: Response, next: NextFunction) {
 
@@ -63,13 +63,10 @@ function ensureRequiredFields (req: Request, res: Response, next: NextFunction) 
 
   // Checking email address unsing RegExp
   const reg = /^[a-z0-9.]+@[a-z0-9]+\.com(\.[a-z0-9.]+)?$/;
-  if(!reg.test(email)){
-    return res.status(400).json({
-      error: true,
-      errorMessage: `Email: ${email} is invalid.`
-    });
-  }
   
+  if(!reg.test(email)){
+    throw new AppError(`Email: ${email} is invalid.`);
+  }
   
   return next();
 }

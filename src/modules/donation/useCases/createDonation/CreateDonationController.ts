@@ -1,4 +1,5 @@
 import { Request, Response } from "express";
+import { CreateDonationUseCase } from "./CreateDonationUseCase";
 
 class CreateDonationController{
 
@@ -19,10 +20,22 @@ class CreateDonationController{
       devices
     } = req.body;
 
-    const obj = {
-      succes: true
-    }
-    return res.json(obj);
+    const createDonationUseCase = new CreateDonationUseCase();
+    
+    return createDonationUseCase.execute({
+      name,
+      email,
+      phone,
+      zip,
+      city,
+      state,
+      streetAddress,
+      number,
+      complement,
+      neighborhood,
+      deviceCount,
+      devices
+    });
   }
 
 }

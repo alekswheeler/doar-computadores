@@ -15,6 +15,10 @@ class Donation{
   deviceCount: number| undefined;
   devices: [] | undefined
 
+  constructor (data: ICreateDonationDTO){
+    //Something
+  }
+
 }
 
 export { Donation }

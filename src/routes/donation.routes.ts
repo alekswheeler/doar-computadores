@@ -1,4 +1,5 @@
 import { Router } from "express";
+import { ensureDevices } from "../middlewares/ensureDevices";
 import { ensureRequiredFields } from "../middlewares/ensureRequiredFields";
 import { CreateDonationController } from "../modules/donation/useCases/createDonation/CreateDonationController";
 
@@ -6,6 +7,6 @@ import { CreateDonationController } from "../modules/donation/useCases/createDon
 const donation = Router();
 const createDonationController = new CreateDonationController();
 
-donation.post("/donation", ensureRequiredFields, createDonationController.handle);
+donation.post("/donation", ensureRequiredFields, ensureDevices, createDonationController.handle);
 
 export { donation }

@@ -1,11 +1,13 @@
-import { Router } from "express";
-import { ServerAliveController } from "../modules/donation/useCases/serverAlive/ServerAliveController";
-import { alive } from "./alive.routes";
+import { application, NextFunction, Router } from "express";
 import { donation } from "./donation.routes";
 
 const router = Router();
 
-router.use(alive);
 router.use(donation);
+
+router.get("/", (req, res)=>{
+  return res.json({alive: true});
+});
+
 
 export { router };
