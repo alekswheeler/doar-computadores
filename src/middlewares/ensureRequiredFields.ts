@@ -75,7 +75,7 @@ function ensureRequiredFields (req: Request, res: Response, next: NextFunction) 
 
   if(phone.length !== 11){
     throw new AppError({
-      errorMessage: `O número de telefone precisa ter o fomato DD+123456789`
+      errorMessage: `O número de telefone precisa ter o fomato DD123456789`
     });
   }
   

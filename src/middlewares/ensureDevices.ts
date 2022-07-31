@@ -4,8 +4,8 @@ import { AppError } from "../errors/AppError";
 interface IuserData{
   devices: [
     {
-      type: "notebook" | "desktop" | "netbook" | "screen" | "printer" | "scanner",
-      condition: "working" | "notWorking" | "broken"
+      type: string,
+      condition: string
     }
   ];
   deviceCount: number;
