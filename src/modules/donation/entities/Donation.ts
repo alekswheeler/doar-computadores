@@ -1,4 +1,4 @@
-import { ICreateDonationDTO } from "../dtos/ICreateDonationDTO";
+import { ICreateDonationDTO } from "../interfaces/ICreateDonationDTO";
 
 class Donation{
 

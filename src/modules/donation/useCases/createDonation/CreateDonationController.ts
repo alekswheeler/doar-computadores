@@ -22,7 +22,7 @@ class CreateDonationController{
 
     const createDonationUseCase = new CreateDonationUseCase();
     
-    return createDonationUseCase.execute({
+    const result = createDonationUseCase.execute({
       name,
       email,
       phone,
@@ -36,6 +36,8 @@ class CreateDonationController{
       deviceCount,
       devices
     });
+
+    return res.status(200).json(result);
   }
 
 }

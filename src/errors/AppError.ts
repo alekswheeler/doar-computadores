@@ -1,10 +1,20 @@
-class AppError{
-  readonly message: string;
-  readonly statusCode: number;
+interface IAppErrorDTO{
+  errorMessage: string;
+  statusCode?: number;
+  requiredFields?: string[]
+}
 
-  constructor(message: string, statusCode: number = 400){
-    this.message = message;
+class AppError{
+  readonly errorMessage: string;
+  readonly statusCode: number;
+  readonly requiredFields?: string[];
+
+  constructor({errorMessage, statusCode = 400, requiredFields}: IAppErrorDTO){
+    this.errorMessage = errorMessage;
     this.statusCode = statusCode;
+    if(requiredFields !== undefined){
+      this.requiredFields = requiredFields;
+    }
   }
 }
 

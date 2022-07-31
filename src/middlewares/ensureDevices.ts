@@ -25,7 +25,9 @@ function ensureDevices (req: Request, res: Response, next: NextFunction) {
       case "scanner":
         break;
       default:
-        throw new AppError(`Aparelhos do tipo (${device.type}) não são aceitos.`);
+        throw new AppError({
+          errorMessage: `Aparelhos do tipo (${device.type}) não são aceitos.`
+        });
     }
 
     switch (device.condition) {
@@ -34,12 +36,16 @@ function ensureDevices (req: Request, res: Response, next: NextFunction) {
       case "broken":
         break;
       default:
-        throw new AppError(`Estado de aparelho (${device.condition}) desconhecido.`);
+        throw new AppError({
+          errorMessage: `Estado de aparelho (${device.condition}) desconhecido.`
+        });
     }
   });
 
   if(deviceCount !== devices.length){
-    throw new AppError(`A quantidade de equipamentos (${deviceCount}) não está de acordo com as informações de equipamentos enviados (${devices.length}).`);
+    throw new AppError({
+      errorMessage: `A quantidade de equipamentos (${deviceCount}) não está de acordo com as informações de equipamentos enviados (${devices.length}).`
+    });
   }
 
   return next();

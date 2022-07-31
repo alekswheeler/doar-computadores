@@ -58,14 +58,25 @@ function ensureRequiredFields (req: Request, res: Response, next: NextFunction) 
   }
 
   if(fields.length !== 0){
-    return res.status(400).json(message);
+    throw new AppError(message);
   }
 
   // Checking email address unsing RegExp
   const reg = /^[a-z0-9.]+@[a-z0-9]+\.com(\.[a-z0-9.]+)?$/;
-  
-  if(!reg.test(email)){
-    throw new AppError(`Email: ${email} is invalid.`);
+  if(email){
+    if(!reg.test(email)){
+      throw new AppError({
+        errorMessage: `Email: ${email} is invalid.` 
+      });
+    }
+  }
+
+  //Checking phoneNumber
+
+  if(phone.length !== 11){
+    throw new AppError({
+      errorMessage: `O número de telefone precisa ter o fomato DD+123456789`
+    });
   }
   
   return next();

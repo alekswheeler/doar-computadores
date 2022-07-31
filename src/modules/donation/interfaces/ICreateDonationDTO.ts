@@ -10,12 +10,11 @@ interface ICreateDonationDTO{
   complement?: string,
   neighborhood: string,
   deviceCount:number,
-  devices: [
+  devices:
     {
-      type: "notebook" | "desktop" | "netbook" | "screen" | "printer" | "scanner",
-      condition: "working" | "notWorking" | "broken"
-    }
-  ]
+      type: string,
+      condition: string
+    }[]
 }
 
 export { ICreateDonationDTO }
