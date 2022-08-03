@@ -8,7 +8,8 @@
     "dev": "ts-node-dev --ignore-watch node_modules --respawn --transpile-only ./src/server",
     "start": "node ./bin/src/server.js",
     "test": "jest",
-    "postinstall": "npm run build"
+    "postinstall": "npm run build",
+    "heroku": "npx tsc && heroku local web"
   },
   "repository": {
     "type": "git",
