@@ -5,10 +5,10 @@
   "main": "index.js",
   "scripts": {
     "build": "npx tsc",
-    "postinstall": "npm run build",
     "dev": "ts-node-dev --ignore-watch node_modules --respawn --transpile-only ./src/server",
     "start": "node ./bin/src/server.js",
-    "test": "jest"
+    "test": "jest",
+    "postinstall": "npm run build"
   },
   "repository": {
     "type": "git",
