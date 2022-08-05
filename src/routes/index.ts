@@ -2,8 +2,18 @@ import express, { Request, Response, NextFunction} from "express";
 import { donation } from "./donation.routes";
 import "express-async-errors";
 import { AppError } from "../errors/AppError";
+import cors from "cors";
 
 const router = express();
+
+
+const allowedOrigins = ['http://localhost:5000', 'https://doar-computadores-yaghomattos.vercel.app'];
+
+const options: cors.CorsOptions = {
+  origin: allowedOrigins
+};
+
+router.use(cors(options));
 
 router.use(express.json());
 
