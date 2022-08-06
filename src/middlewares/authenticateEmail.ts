@@ -17,11 +17,11 @@ function authenticateEmail (req: Request, res: Response, next: NextFunction) {
   const { email } = req.body;
 
   if(!email){
-    throw new AppError({
-      errorMessage: "O campo email é obrigatório",
-      statusCode: 400
-    });
-    
+    // throw new AppError({
+    //   errorMessage: "O campo email é obrigatório",
+    //   statusCode: 400
+    // });
+    return next();
   }
 
   // Checking email address unsing RegExp

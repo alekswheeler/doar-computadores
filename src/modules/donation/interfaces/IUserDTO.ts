@@ -1,6 +1,4 @@
-import { Device } from "../entities/Device";
-
-interface ICreateDonationDTO{
+interface IUserDTO{
   name: string;
   email?: string,
   phone: string,
@@ -11,8 +9,6 @@ interface ICreateDonationDTO{
   number: string,
   complement?: string,
   neighborhood: string,
-  deviceCount:number,
-  devices: Device[]
 }
 
-export { ICreateDonationDTO }
+export { IUserDTO }
