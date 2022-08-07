@@ -5,49 +5,56 @@ import { v4 as uuidV4 } from "uuid"
 class User{
 
   @PrimaryColumn()
-  id: string;
+  id?: string;
 
   @Column({
-    type: "varchar"
+    type: "varchar",
+    nullable: false
   })
-  name: string | undefined;
+  name: string;
 
   @Column({
     type: "varchar",
     nullable: true
   })
-  email?: string | undefined;
+  email?: string;
 
   @Column({
-    type: "varchar"
+    type: "varchar",
+    nullable: false
   })
-  phone: string | undefined;
+  phone: string;
 
   @Column({
-    type: "varchar"
+    type: "varchar",
+    nullable: false
   })
-  zip: string| undefined;
+  zip: string;
 
   @Column({
-    type: "varchar"
+    type: "varchar",
+    nullable: false
   })
-  city: string| undefined;
+  city: string;
 
   @Column({
-    type: "varchar"
+    type: "varchar",
+    nullable: false
   })
-  state: string | undefined;
+  state: string;
 
   @Column({
     name: "streetaddress",
-    type: "varchar"
+    type: "varchar",
+    nullable: false
   })
-  streetAddress: string| undefined;
+  streetAddress: string;
 
   @Column({
-    type: "varchar"
+    type: "varchar",
+    nullable: false
   })
-  number: string | undefined;
+  number: string;
 
   @Column({
     nullable: true,
@@ -56,14 +63,16 @@ class User{
   complement?: string;
 
   @Column({
-    type: "varchar"
+    type: "varchar",
+    nullable: false
   })
-  neighborhood: string | undefined;
+  neighborhood: string;
 
   constructor(){
-    this.id = uuidV4();
+    if(!this.id){
+      this.id = uuidV4();
+    }
   }
 }
-
 
 export { User };

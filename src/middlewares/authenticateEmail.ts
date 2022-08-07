@@ -25,7 +25,7 @@ function authenticateEmail (req: Request, res: Response, next: NextFunction) {
   }
 
   // Checking email address unsing RegExp
-  const reg = /^[a-z0-9.]+@[a-z0-9]+\.com(\.[a-z0-9.]+)?$/;
+  const reg = /^[a-z0-9.]+@[a-z0-9]+(\.[a-z0-9.]+)?$/;
   
   if(email){
     if(!reg.test(email)){
@@ -37,6 +37,5 @@ function authenticateEmail (req: Request, res: Response, next: NextFunction) {
 
   return next();
 }
-
 
 export { authenticateEmail };

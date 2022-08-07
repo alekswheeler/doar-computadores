@@ -1,22 +1,36 @@
+import { Column, CreateDateColumn, Entity, OneToMany, PrimaryColumn } from "typeorm";
 import { ICreateDonationDTO } from "../interfaces/ICreateDonationDTO";
+import { Device } from "./Device";
+import { v4 as uuidv4 } from "uuid";
 
+@Entity("donations")
 class Donation{
 
-  name: string | undefined;
-  email?: string;
-  phone: string | undefined;
-  zip: string| undefined;
-  city: string| undefined;
-  state: string | undefined;
-  streetAddress: string| undefined;
-  number: string | undefined;
-  complement?: string;
-  neighborhood: string | undefined;
-  deviceCount: number| undefined;
-  devices: [] | undefined
+  @PrimaryColumn({
+    type: "varchar"
+  })
+  id: string;
+  
+  @Column({
+    type: "varchar",
+    name: "userid"
+  })
+  userId: string;
 
-  constructor (data: ICreateDonationDTO){
-    //Something
+  @Column({
+    type: "integer"
+  })
+  quantity: number;
+
+  @CreateDateColumn({
+    type: "date"
+  })
+  created_at: Date;
+
+  constructor (userId: string){
+    this.id = uuidv4();
+    this.userId = userId;
+    this.created_at = new Date();
   }
 
 }

@@ -16,6 +16,12 @@ class Device{
   })
   condition: string | undefined;
 
+  @Column({
+    name: "donationid",
+    type: "varchar"
+  })
+  donationId: string;
+
   constructor(){
     this.id = uuidV4();
   }

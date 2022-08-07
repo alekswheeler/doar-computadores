@@ -6,17 +6,25 @@ class DevicesRepository implements IDevicesRepository{
 
   private remoteRepository = appDataSource.getRepository(Device);
 
-  //For each device use a function save and insert into database
-  async saveAll(devices: Device[]): Promise<void> {
+  //Save all devices in database
+  async saveAll(devices: Device[], donationId: string): Promise<void> {
     devices.forEach(async (device)=>{
-      await this.save(device.type as string, device.condition as string);
+
+      const d = this.remoteRepository.create({
+        type: device.type,
+        condition: device.condition,
+        donationId: donationId
+      });
+
+      this.remoteRepository.save(d);
     })
   }
 
-  async save(type: string, condition: string): Promise<void> {
+  async save(type: string, condition: string, donationId: string): Promise<void> {
     const device = this.remoteRepository.create({
       type,
-      condition
+      condition,
+      donationId
     });
 
     await this.remoteRepository.save(device);
@@ -24,7 +32,6 @@ class DevicesRepository implements IDevicesRepository{
 
   async list(): Promise<Device[]> {
     const devices = await this.remoteRepository.find();
-
     return devices;
   }
  

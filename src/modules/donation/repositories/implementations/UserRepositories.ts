@@ -23,7 +23,8 @@ class UsersRepository implements IUsersRepository{
     state,
     streetAddress,
     complement
-  }: IUserDTO): Promise<void> {
+  }: IUserDTO): Promise<User> {
+
     const user = this.remoteRepository.create({
       name,
       email,
@@ -36,8 +37,9 @@ class UsersRepository implements IUsersRepository{
       streetAddress,
       complement
     });
-
     await this.remoteRepository.save(user);
+
+    return user;
   }
 
   async findByEmail(email: string): Promise<User | null> {
@@ -60,6 +62,32 @@ class UsersRepository implements IUsersRepository{
   list(): Promise<User[]> {
     const users = this.remoteRepository.find();
     return users;
+  }
+
+  async update({
+    name,
+    email,
+    city,
+    number,
+    phone,
+    neighborhood,
+    zip,
+    state,
+    streetAddress,
+    complement
+  }: IUserDTO): Promise<void> {
+    this.remoteRepository.update({ phone }, { 
+      name,
+      email,
+      city,
+      number,
+      phone,
+      neighborhood,
+      zip,
+      state,
+      streetAddress,
+      complement
+     });
   }
   
 }

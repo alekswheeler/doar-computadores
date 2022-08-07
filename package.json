@@ -5,12 +5,10 @@
   "main": "index.js",
   "scripts": {
     "build": "npx tsc",
-    "dev": "ts-node-dev --ignore-watch node_modules --respawn --transpile-only ./src/server",
     "start": "node ./bin/src/server.js",
     "test": "jest",
     "postinstall": "npm run build",
-    "heroku": "npx tsc && heroku local web",
-    "typeorm": "typeorm-ts-node-commonjs"
+    "dev": "npx tsc && heroku local web"
   },
   "repository": {
     "type": "git",

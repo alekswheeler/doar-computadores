@@ -7,7 +7,7 @@ const appDataSource = new DataSource({
   ssl: {
     rejectUnauthorized: false,
   },
-  entities: ["bin/src/modules/donation/entities/*.js"]
+  entities: ["bin/src/modules/donation/entities/*.js"],
 });
 
 export { appDataSource }
