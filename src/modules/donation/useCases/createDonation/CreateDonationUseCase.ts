@@ -50,9 +50,6 @@ class CreateDonationUseCase{
     if(!number){
       requiredFields.push("number");
     }
-    if(!complement){
-      requiredFields.push("complement");
-    }
     if(!neighborhood){
       requiredFields.push("neighborhood");
     }
@@ -74,6 +71,17 @@ class CreateDonationUseCase{
       throw new AppError({
         errorMessage: "A quantidade de items informada está diferente da quantidade de items enviada."
       });
+    }
+
+     // Checking email address unsing RegExp
+    const reg = /^[a-z0-9.]+@[a-z0-9]+(\.[a-z0-9.]+)?$/;
+    
+    if(email){
+      if(!reg.test(email)){
+        throw new AppError({
+          errorMessage: `O E-mail: ${email} é inválido.`
+        });
+      }
     }
 
     const userAlreadExists = await this.usersRepository.findByPhone(phone);

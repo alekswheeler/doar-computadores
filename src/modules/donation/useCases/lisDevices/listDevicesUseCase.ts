@@ -1,9 +1,9 @@
 import { Device } from "../../entities/Device";
-import { DevicesRepository } from "../../repositories/implementations/DevicesRepository"
+import { IDevicesRepository } from "../../repositories/interfaces/IDevicesRepository";
 
 class ListDevicesUseCase{
 
-  private devicesRepository = new DevicesRepository();
+  constructor(private devicesRepository: IDevicesRepository){}
 
   async execute(): Promise<Device[]>{
     return await this.devicesRepository.list();

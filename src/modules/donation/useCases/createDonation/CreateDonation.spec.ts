@@ -1,235 +1,237 @@
-import request from "supertest";
-import { router } from "../../../../routes";
+import { inMemoryDevicesRepository } from "../../repositories/inMemory/inMemoryDevicesRepository";
+import { inMemoryDontaionsRepository } from "../../repositories/inMemory/inMemoryDonationsRepositpry";
+import { inMemoryUsersRepository } from "../../repositories/inMemory/inMemoryUsersRepository";
+import { IDevicesRepository } from "../../repositories/interfaces/IDevicesRepository";
+import { IDonationRepository } from "../../repositories/interfaces/IDonationRepository";
+import { IUsersRepository } from "../../repositories/interfaces/IUsersRepository";
+import { ListDevicesUseCase } from "../lisDevices/listDevicesUseCase";
+import { CreateDonationUseCase } from "./CreateDonationUseCase";
+import { AppError } from "../../../../errors/AppError";
+import { Device } from "../../entities/Device";
+import { User } from "../../entities/User";
+
+//InMemoryRepositories allows testing without making request to the database
 
 describe("Create Donation", ()=>{
 
-  test("Should not be able to creat donation with missing required fields", async() => {
+  let usersRepository: IUsersRepository;
+  let devicesRepository: IDevicesRepository;
+  let donationsRepository: IDonationRepository;
+  let createDonationUseCase: CreateDonationUseCase;
 
-    const userData = {
-      //name: "alex",
-      email: "alex44.123@gmail.com",
-      phone: "55123456789",
-      zip: "10001",
-      //city: "Baltimore",
-      state: "MD",
-      streetAddress: "Delancey St",
-      //number: 80,
-      complement: "Apartment",
-      neighborhood: "ashhjasj",
-      deviceCount: 2,
-      devices: [
-        {
-          type: "screen",
-          condition: "broken"
-        },
-        {
-          type: "scanner",
-          condition: "working"
-        }
-      ]
-    }
-
-    await request(router).post("/donation").send(userData).then(response => {
-      expect(response.status).toBe(400);
-      expect(JSON.parse(response.text)).toHaveProperty("errorMessage");
-    });
+  beforeEach(()=>{
+    usersRepository = new inMemoryUsersRepository();
+    donationsRepository = new inMemoryDontaionsRepository();
+    devicesRepository = new inMemoryDevicesRepository();
+    createDonationUseCase = new CreateDonationUseCase(usersRepository, devicesRepository, donationsRepository);
   });
 
-  //A mesangem de erro do email muda para cada email recebido
-  test("Should not be able to create donation with invalid email", async ()=>{
+  test("Should be able to save new users", async ()=>{
 
-    //Os emails comentados não são aceitos
+    const device1 = new Device();
+    const device2 = new Device();
+    device1.donationId = "666sgss66ss";
+    device2.donationId = "888ssffsfr";
 
-    const userData = {
-      name: "alex",
-      email: "alex@gmail",
-      // "email": "alexgmail.com",
-      //"email": "alexgmail.com.",
-      phone: "55123456789",
-      zip: "10001",
-      city: "Baltimore",
-      state: "MD",
-      streetAddress: "Delancey St",
-      number: 80,
-      complement: "Apartment",
-      neighborhood: "ashhjasj",
-      deviceCount: 2,
-      devices: [
-        {
-          type: "screen",
-          condition: "broken"
-        },
-        {
-          type: "scanner",
-          condition: "working"
-        }
+    const userdata = {
+      "name": "João João",
+      "email": "teste@gmail.com",
+      "phone": "557876776677",
+      "zip": "12345678",
+      "city": "Juazeiro",
+      "state": "MG",
+      "streetAddress": "Rua uma rua",
+      "number": "1233",
+      "complement": "Uma rua",
+      "neighborhood": "Pampulha",
+      "deviceCount": 2,
+      "devices": [
+        device1,
+        device2
       ]
     }
 
-    await request(router).post("/donation").send(userData).then(response => {
-      expect(response.status).toBe(400);
-      const resObj = JSON.parse(response.text);
-      expect(resObj.error).toBe(true);
-      expect(resObj).toHaveProperty("errorMessage");
-    });
-  })
+    await createDonationUseCase.execute(userdata);
+    const user = await usersRepository.findByPhone(userdata.phone);
 
-  test("Should not be able to create donation with deviceCount from number of devices sent", async ()=>{
-
-    const userData = {
-      name: "alex",
-      email: "alex44.123@gmail.com",
-      phone: "55123456789",
-      zip: "10001",
-      city: "Baltimore",
-      state: "MD",
-      streetAddress: "Delancey St",
-      number: 80,
-      complement: "Apartment",
-      neighborhood: "ashhjasj",
-      deviceCount: 4,
-      devices: [
-        {
-          type: "screen",
-          condition: "broken"
-        },
-        {
-          type: "scanner",
-          condition: "working"
-        }
-      ]
+    if(user instanceof User){
+      expect(user.phone).toBe(userdata.phone);
     }
 
-    await request(router).post("/donation").send(userData).then(response => {
-      expect(response.status).toBe(400);
-      const resObj = JSON.parse(response.text);
-      expect(resObj.error).toBe(true);
-      expect(resObj).toHaveProperty("errorMessage");
-    });
   });
 
-  test("Should not be able to create Donation without devices", async ()=>{
-    const userData = {
-      name: "alex",
-      email: "alex44.123@gmail.com",
-      phone: "55123456789",
-      zip: "10001",
-      city: "Baltimore",
-      state: "MD",
-      streetAddress: "Delancey St",
-      number: 80,
-      complement: "Apartment",
-      neighborhood: "ashhjasj",
-      deviceCount: 2,
-    }
+  test("Should not be able to accept invalid email", async ()=>{
 
-    await request(router).post("/donation").send(userData).then(response => {
-      expect(response.status).toBe(400);
-      const resObj = JSON.parse(response.text);
-      expect(resObj.error).toBe(true);
-      expect(resObj).toHaveProperty("errorMessage");
-    });
-  });
+    const device1 = new Device();
+    const device2 = new Device();
+    device1.donationId = "666sgss66ss";
+    device2.donationId = "888ssffsfr";
 
-  test("Should not be able to create Donation with wrong types", async ()=>{
-
-    const userData = {
-      name: "alex",
-      email: "alex44.123@gmail.com",
-      phone: "55123456789",
-      zip: "10001",
-      city: "Baltimore",
-      state: "MD",
-      streetAddress: "Delancey St",
-      number: 80,
-      complement: "Apartment",
-      neighborhood: "ashhjasj",
-      deviceCount: 2,
-      devices: [
-        {
-          type: "screennn",
-          condition: "broken"
-        },
-        {
-          type: "scanner",
-          condition: "working"
-        }
+    const userdata = {
+      "name": "João João",
+      // "email": "teste@gmail",
+      // "email": "teste@g",
+      //"email": "@gmail.appmasters.io",
+      "email": "@gmail.com",
+      "phone": "557876776677",
+      "zip": "12345678",
+      "city": "Juazeiro",
+      "state": "MG",
+      "streetAddress": "Rua uma rua",
+      "number": "1233",
+      "complement": "Uma rua",
+      "neighborhood": "Pampulha",
+      "deviceCount": 2,
+      "devices": [
+        device1,
+        device2
       ]
     }
 
-    await request(router).post("/donation").send(userData).then(response => {
-      expect(response.status).toBe(400);
-      const resObj = JSON.parse(response.text);
-      expect(resObj.error).toBe(true);
-      expect(resObj).toHaveProperty("errorMessage");
-    });
+    expect(async ()=>{
+      await createDonationUseCase.execute(userdata);
+    }).rejects.toBeInstanceOf(AppError);
+
   });
 
-  test("Should not be able to create donation with wrong phone number", async ()=>{
+  test("should not be able to accept missing fields", async()=>{
+    const device1 = new Device();
+    const device2 = new Device();
+    device1.donationId = "666sgss66ss";
+    device2.donationId = "888ssffsfr";
 
-    //Os emails comentados não são aceitos
-    const userData = {
-      name: "alex",
-      email: "alex44.123@gmail.com",
-      phone: "551234",
-      zip: "10001",
-      city: "Baltimore",
-      state: "MD",
-      streetAddress: "Delancey St",
-      number: 80,
-      complement: "Apartment",
-      neighborhood: "ashhjasj",
-      deviceCount: 2,
-      devices: [
-        {
-          type: "screen",
-          condition: "broken"
-        },
-        {
-          type: "scanner",
-          condition: "working"
-        }
+    const userdata = {
+      "name": "",
+      "email": "teste@gmail.com",
+      "phone": "",
+      "zip": "12345678",
+      "city": "Juazeiro",
+      "state": "MG",
+      "streetAddress": "Rua uma rua",
+      "number": "1233",
+      "complement": "Uma rua",
+      "neighborhood": "",
+      "deviceCount": 2,
+      "devices": [
+        device1,
+        device2
       ]
     }
 
-    await request(router).post("/donation").send(userData).then(response => {
-      expect(response.status).toBe(400);
-      const resObj = JSON.parse(response.text);
-      expect(resObj.error).toBe(true);
-      expect(resObj).toHaveProperty("errorMessage");
-    });
+    expect(async ()=>{
+      await createDonationUseCase.execute(userdata);
+    }).rejects.toBeInstanceOf(AppError);
+    
   });
 
-  test("Should be able to create donation", async ()=>{
+  test("should not be able to accept deviceCount invalid", async()=>{
+    const device1 = new Device();
+    const device2 = new Device();
+    device1.donationId = "666sgss66ss";
+    device2.donationId = "888ssffsfr";
 
-    //Os emails comentados não são aceitos
-    const userData = {
-      name: "alex",
-      email: "alex44.123@gmail.com",
-      phone: "55123456789",
-      zip: "10001",
-      city: "Baltimore",
-      state: "MD",
-      streetAddress: "Delancey St",
-      number: 80,
-      complement: "Apartment",
-      neighborhood: "ashhjasj",
-      deviceCount: 2,
-      devices: [
-        {
-          type: "screen",
-          condition: "broken"
-        },
-        {
-          type: "scanner",
-          condition: "working"
-        }
+    const userdata = {
+      "name": "",
+      "email": "teste@gmail.com",
+      "phone": "",
+      "zip": "12345678",
+      "city": "Juazeiro",
+      "state": "MG",
+      "streetAddress": "Rua uma rua",
+      "number": "1233",
+      "complement": "Uma rua",
+      "neighborhood": "",
+      "deviceCount": 5,
+      "devices": [
+        device1,
+        device2
       ]
     }
 
-  await request(router).post("/donation").send(userData).then(response => {
-      expect(response.statusCode).toBe(200);
+    expect(async ()=>{
+      await createDonationUseCase.execute(userdata);
+    }).rejects.toBeInstanceOf(AppError);
+    
+  });
+
+  test("Should be able update an existent user", async ()=>{
+
+    const device1 = new Device();
+    const device2 = new Device();
+    device1.donationId = "666sgss66ss";
+    device2.donationId = "888ssffsfr";
+
+    const userdata = {
+      "name": "João João",
+      "email": "teste@gmail.com",
+      "phone": "557876776677",
+      "zip": "12345678",
+      "city": "Juazeiro",
+      "state": "MG",
+      "streetAddress": "Rua uma rua",
+      "number": "1233",
+      "complement": "Uma rua",
+      "neighborhood": "Pampulha",
+      "deviceCount": 2,
+      "devices": [
+        device1,
+        device2
+      ]
+    }
+
+    await createDonationUseCase.execute(userdata);
+
+    userdata.city = "Salvador";
+    userdata.state = "BA";
+    userdata.zip = "123456"
+
+    await createDonationUseCase.execute(userdata);
+
+    const user = await usersRepository.findByPhone("557876776677");
+    
+    if(user instanceof User){
+      expect(user.city).toBe("Salvador");
+      expect(user.zip).toBe("123456");
+      expect(user.state).toBe("BA");
+    }
+
+  });
+
+  //This test case is from listDevicesUseCase, but it have only one function
+  test("Should be able to list all devices", async ()=>{
+
+    const device1 = new Device();
+    const device2 = new Device();
+    device1.donationId = "666sgss66ss";
+    device2.donationId = "888ssffsfr";
+
+    const userdata = {
+      "name": "João João",
+      "email": "teste@gmail.com",
+      "phone": "557876776677",
+      "zip": "12345678",
+      "city": "Juazeiro",
+      "state": "MG",
+      "streetAddress": "Rua uma rua",
+      "number": "1233",
+      "complement": "Uma rua",
+      "neighborhood": "Pampulha",
+      "deviceCount": 2,
+      "devices": [
+        device1,
+        device2
+      ]
+    }
+
+    await createDonationUseCase.execute(userdata);
+    const listDevicesUseCase = new ListDevicesUseCase(devicesRepository);
+
+    const devices = await listDevicesUseCase.execute();
+
+    devices.forEach((device)=>{
+      expect(device).toBeInstanceOf(Device);
     });
+
   });
   
 });

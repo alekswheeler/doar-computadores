@@ -5,7 +5,7 @@ Processo seletivo [App Masters](https://www.appmasters.io/pt).
 ## Objetivo
 
 Criar uma API para doação de computadores e aparelhos eletrônicos utilizando nodejs.
-Link para a [API]()
+Link para a [API](https://aleks-doar-compautadores.herokuapp.com/)
 
 ## Como funciona
 
@@ -47,6 +47,20 @@ Email e complemento são campos opcionais.
 #### Banco de dados
 
 Por pouco conhecimento com o typeorm, as tabelas foram criadas com comandos SQL. E as classes descritas a seguir mapeiam objetos diretamente para as tabelas.
+
+      CREATE TABLE users(
+        id VARCHAR PRIMARY KEY,
+        name VARCHAR NOT NULL,
+        email VARCHAR UNIQUE IS NULL,
+        phone VARCHAR UNIQUE NOT NULL,
+        zip VARCHAR NOT NULL,
+        city VARCHAR NOT NULL,
+        state VARCHAR NOT NULL,
+        streetaddress NOT NULL,
+        number NOT NULL,
+        complement IS NULL,
+        neighborhood NOT NULL
+      );
 
       CREATE TABLE donations(
           id VARCHAR PRIMARY KEY,
@@ -108,3 +122,7 @@ Para rodar localmente foi utilizado o `heroku cli` que simula o ambiente de depl
     npm run dev
 
 Não irá funcionar pois a variável de ambiente não está no repositório por questões de segurança do projeto.
+
+Mas os testes estão automatizados e podem ser feitos sem a conexão com o banco de dados. Basta rodar o comando
+
+    npm run test
